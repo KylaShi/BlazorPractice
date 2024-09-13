@@ -1,0 +1,57 @@
+﻿@using PracticeMVVM.Pages.Users.Models
+@using MudBlazor
+@using System.Collections.ObjectModel
+@* // Importing necessary namespaces for models (User class), UI components (MudBlazor), and collections (ObservableCollection). *@
+
+<!-- Button to create a new user, which triggers the CreateUserAction passed from the parent (UserPage). -->
+<MudButton @onclick="CreateUserProc"> CREATE EMPLOYEE</MudButton>
+
+<!-- Table displaying the list of users, bound to the "Users" property passed from UserPage. -->
+<MudDataGrid T="User" Items="Users">
+	<Columns>
+		<!-- Column for displaying user names -->
+		<PropertyColumn Property="x => x.Name" title="Name"></PropertyColumn>
+
+		<!-- Column for displaying user addresses -->
+		<PropertyColumn Property="x => x.Address" title="Address"></PropertyColumn>
+
+		<!-- Column for displaying user usernames -->
+		<PropertyColumn Property="x => x.Username" title="Username"></PropertyColumn>
+
+		<!-- A column that includes action buttons for each row (e.g., an Update button). -->
+		<TemplateColumn CellClass="d-flex justify-end">
+			<CellTemplate>
+				<MudStack Row>
+					<!-- Update button, which triggers the UpdateUserProc method with the specific user. -->
+					<MudButton @onclick="() => UpdateUserProc(context.Item)">Update</MudButton>
+				</MudStack>
+			</CellTemplate>
+		</TemplateColumn>
+	</Columns>
+</MudDataGrid>
+
+@code {
+	// Action to handle the creation of a new user, passed down from UserPage (via CreateUser).
+	[Parameter]
+	public Action CreateUserAction { get; set; }
+
+	// Action to handle updating a user, passed down from UserPage (via UpdateUser).
+	[Parameter]
+	public Action<User> UpdateUserAction { get; set; }
+
+	// Observable collection of users, passed from UserListViewModel (from UserPage).
+	[Parameter]
+	public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
+
+	// Method to invoke the CreateUserAction (triggers the CreateUser method in UserPage).
+	private void CreateUserProc()
+	{
+		CreateUserAction?.Invoke();
+	}
+
+	// Method to invoke the UpdateUserAction with the selected user (triggers the UpdateUser method in UserPage).
+	private void UpdateUserProc(User user)
+	{
+		UpdateUserAction?.Invoke(user);
+	}
+}

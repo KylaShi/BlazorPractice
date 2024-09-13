@@ -1,0 +1,46 @@
+﻿@attribute [Route("/users")] 
+@* // Sets the route for this page. When the user navigates to "/users", this page will be displayed. *@
+
+@using PracticeMVVM.Pages.Users.ViewModels
+@using PracticeMVVM.Pages.Users.Models
+@* // Import the namespaces for ViewModels and Models so we can use the classes from these namespaces. *@
+
+@inject UserListViewModel UserListViewModel
+@* // Injects the UserListViewModel which holds the list of users. This ViewModel will be used to manage user data. *@
+
+@inject UserActionsViewModel UserActionsViewModel
+@* // Injects the UserActionsViewModel which provides the logic for creating and updating users (like navigating to forms and setting up users for creation or update). *@
+
+<UserList Users="UserListViewModel.Users" 
+          CreateUserAction="CreateUser" 
+          UpdateUserAction="(user) => UpdateUser(user)">
+</UserList>
+@* // The UserList component is used to display the list of users.
+// - "Users" binds the list of users from UserListViewModel.Users (an ObservableCollection<User>).
+// - "CreateUserAction" binds the CreateUser method from this page, called when the user clicks to create a new user.
+// - "UpdateUserAction" binds the UpdateUser method (lambda) and passes a specific user as an argument when the update button is clicked. *@
+
+@code {
+    // This method is called when the component is first initialized (before rendering the UI).
+	protected override Task OnInitializedAsync()
+	{
+		return base.OnInitializedAsync();
+	}
+
+    // This method is called when the Create button is clicked in the UserList component.
+	private void CreateUser()
+	{
+		UserActionsViewModel.CreateUser();
+        // Calls the CreateUser method from UserActionsViewModel.
+        // It prepares the form for user creation (sets up a blank user) and navigates to the creation form page.
+	}
+
+    // This method is called when the Update button is clicked in the UserList component.
+	private void UpdateUser(User user)
+	{
+		UserActionsViewModel.UpdateUser(user);
+        // Calls the UpdateUser method from UserActionsViewModel, passing the `user` to be updated.
+        // The user parameter here is passed from the UI (UserList), allowing us to modify the selected user's data.
+        // This method sets up the form for user editing and navigates to the update form.
+	}
+}

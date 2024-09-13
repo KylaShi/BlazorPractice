@@ -1,0 +1,42 @@
+﻿@using MudBlazor
+@using PracticeMVVM.Pages.Users.Models
+@using PracticeMVVM.Pages.Users.ViewModels
+@inject NavigationManager NavigationManager
+@* // Injects the NavigationManager service to enable navigation to different routes (pages). *@
+
+@inject UserFormViewModel UserFormViewModel
+@* // Injects the UserFormViewModel which is responsible for managing the data in the form. *@
+
+@attribute [Route("users/create")]
+@attribute [Route("users/update")]
+@* // Defines routes for the form, making it accessible at "/users/create" and "/users/update" URLs. *@
+
+<h3>User</h3>
+
+<!-- Form fields bound to the properties in UserFormViewModel.User (two-way binding with @bind-Value). -->
+<MudTextField @bind-Value="UserFormViewModel.User.Name" T="string" Label="Name" Variant="Variant.Outlined"></MudTextField>
+<MudTextField @bind-Value="UserFormViewModel.User.Address" T="string" Label="Address" Variant="Variant.Outlined"></MudTextField>
+<MudTextField @bind-Value="UserFormViewModel.User.Username" T="string" Label="Username" Variant="Variant.Outlined"></MudTextField>
+
+<div class="d-flex flex-row">
+	<!-- Button to save the user, calling SaveUser method -->
+	<MudButton @onclick="SaveUser" Variant="Variant.Filled" Style="margin-right: 4px;">Save</MudButton>
+
+	<!-- Button to cancel the operation and navigate back to the user list -->
+	<MudButton @onclick="Cancel" Variant="Variant.Filled" Style="margin-right: 4px;">Cancel</MudButton>
+</div>
+
+@code {
+	// Cancels the operation and navigates back to the user list page.
+	private void Cancel()
+	{
+		NavigationManager.NavigateTo("/users");
+	}
+
+	// Saves the user by invoking SaveUser in the UserFormViewModel and navigates back to the user list.
+	private void SaveUser()
+	{
+		UserFormViewModel.SaveUser();
+		NavigationManager.NavigateTo("/users");
+	}
+}
